@@ -12,10 +12,8 @@ headers = {
 }
 
 def get_news_data(query):
-    query = '푸틴'
     url = f'https://openapi.naver.com/v1/search/news.json?query={query}&display=10&start=1'
     response = requests.get(url, headers=headers)
-    
     if response.status_code!=200:
         print(response.text)
         return None
@@ -30,9 +28,10 @@ def get_news_data(query):
                 'description':i['description'],
                 'papago':translate(i['title'])
             }
+            print(i['title']) # see process
             datas.append(data)
-            #print(i['title'])
         return pd.DataFrame(datas)
+    
 def translate(line):
     data = {
         'source':'ko',
@@ -46,6 +45,6 @@ def translate(line):
         return response.json()['message']['result']['translatedText']
     else:
         return None
-print(translate('배가고프다'))   
-data = get_news_data('푸틴')
+    
+data = get_news_data('러시아')
 data.to_csv('papago.csv')
